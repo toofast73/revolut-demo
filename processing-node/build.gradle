@@ -21,6 +21,9 @@ mainClassName = "ru.live.toofast.Application"
 
 
 dependencies {
+
+    compile project(':data-model')
+
     compile group: 'org.eclipse.jetty', name: 'jetty-server', version: '9.4.6.v20170531'
     compile group: 'org.eclipse.jetty', name: 'jetty-servlet', version: '9.4.6.v20170531'
 
