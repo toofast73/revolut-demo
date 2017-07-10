@@ -7,6 +7,7 @@ import org.eclipse.jetty.servlet.ServletContextHandler;
 import org.eclipse.jetty.servlet.ServletHolder;
 import org.glassfish.jersey.server.ResourceConfig;
 import org.glassfish.jersey.servlet.ServletContainer;
+import ru.live.toofast.controller.AccountController;
 
 public class PaymentProcessingApplication {
 
@@ -14,11 +15,12 @@ public class PaymentProcessingApplication {
         Ignition.start(clientNodeConfig());
 
         ResourceConfig config = new ResourceConfig();
-        config.packages("ru.live.toofast.controller");
+        config.register(new AccountController());
         ServletHolder servlet = new ServletHolder(new ServletContainer(config));
 
         Server server = new Server(2222);
         ServletContextHandler context = new ServletContextHandler(server, "/*");
+
         context.addServlet(servlet, "/*");
 
         try {
