@@ -1,4 +1,4 @@
-package ru.live.toofast
+package ru.live.toofast.service
 
 import com.google.common.util.concurrent.Futures
 import com.google.common.util.concurrent.ListenableFuture

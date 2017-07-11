@@ -17,11 +17,12 @@ public interface AccountApi  {
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     @Path("{accountId}")
-    Account get(@PathParam("accountId") long id);
+    Response get(@PathParam("accountId") long id);
 
 
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
-    Account store(Account account, @Context final HttpServletResponse response);
+    @Produces(MediaType.APPLICATION_JSON)
+    Response store(Account account);
 
 }

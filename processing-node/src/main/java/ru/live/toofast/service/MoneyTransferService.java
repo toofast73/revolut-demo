@@ -61,7 +61,7 @@ public class MoneyTransferService {
         validate(destination);
 
         if(source.getBalance().compareTo(amount) < 0){
-            throw new NotEnoughFundsException();
+            throw new NotEnoughFundsException(String.format("Account %s has not enough funds", source.getId()));
         }
     }
 

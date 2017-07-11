@@ -1,15 +1,16 @@
 package ru.live.toofast.controller;
 
-import org.eclipse.jetty.http.HttpStatus;
 import ru.live.toofast.api.AccountApi;
 import ru.live.toofast.entity.account.Account;
+import ru.live.toofast.exception.AlreadyExistsException;
 import ru.live.toofast.repository.AccountRepository;
 
-import javax.servlet.http.HttpServletResponse;
 import javax.ws.rs.core.Response;
 
+import static javax.ws.rs.core.Response.Status.CREATED;
 
-public class AccountController implements AccountApi{
+
+public class AccountController implements AccountApi {
 
     private final AccountRepository accountRepository;
 
@@ -18,16 +19,24 @@ public class AccountController implements AccountApi{
     }
 
     @Override
-    public Account get(long id) {
-        return accountRepository.get(id);
+    public Response get(long id) {
+        Account account = accountRepository.get(id);
+        if (account != null) {
+            return Response.ok(account).build();
+        } else {
+            return Response.status(Response.Status.NOT_FOUND).build();
+        }
     }
 
     @Override
-    public Account store(Account account,  HttpServletResponse response) {
+    public Response store(Account account) {
+        Long accountId = account.getId();
+        if (accountRepository.contains(accountId)) {
+            throw new AlreadyExistsException(String.format("Account with id %s already exists", accountId));
+        }
         Account stored = accountRepository.store(account);
-        response.setStatus(HttpServletResponse.SC_CREATED);
 
-        return stored;
+        return Response.status(CREATED).entity(stored).build();
     }
 
 }

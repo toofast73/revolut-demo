@@ -11,7 +11,7 @@ public class FeeService {
     public void collectFee(Payment payment, Account source, Account destination) {
         BigDecimal fee = calculateFee(payment);
         if(source.getBalance().compareTo(fee) < 0){
-            throw new FeeException();
+            throw new FeeException(String.format("Account %s has not enough funds to pay the fee", source.getId() ));
         }
         source.decreaseBalance(fee);
         payment.setFee(fee);

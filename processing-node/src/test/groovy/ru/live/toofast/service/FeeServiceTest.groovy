@@ -1,4 +1,4 @@
-package ru.live.toofast
+package ru.live.toofast.service
 
 import ru.live.toofast.entity.account.Account
 import ru.live.toofast.entity.account.AccountStatus

@@ -5,6 +5,7 @@ import org.apache.commons.lang3.tuple.Pair;
 import org.apache.ignite.IgniteAtomicSequence;
 import ru.live.toofast.entity.account.Account;
 import ru.live.toofast.entity.payment.Payment;
+import ru.live.toofast.exception.AlreadyExistsException;
 
 import javax.cache.Cache;
 
@@ -49,4 +50,7 @@ public class AccountRepository {
         return accounts.get(accountId);
     }
 
+    public boolean contains(Long accountId) {
+        return accounts.containsKey(accountId);
+    }
 }

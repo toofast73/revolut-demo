@@ -1,14 +1,13 @@
 package ru.live.toofast.exception;
 
-public class AccountValidationException extends RuntimeException{
+import javax.ws.rs.WebApplicationException;
+import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
 
-    private final String msg;
+public class AccountValidationException extends WebApplicationException {
 
-    public AccountValidationException(String msg) {
-        this.msg = msg;
-    }
-
-    public String getMsg() {
-        return msg;
+    public AccountValidationException(String message) {
+        super(Response.status(Response.Status.BAD_REQUEST)
+                .entity(new ApplicationExceptionHolder(message, AccountValidationException.class.getName())).type(MediaType.APPLICATION_JSON).build());
     }
 }

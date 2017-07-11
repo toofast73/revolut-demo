@@ -1,6 +1,7 @@
 package ru.live.toofast.entity.account;
 
 import java.math.BigDecimal;
+import java.util.Objects;
 
 public class Account {
 
@@ -47,5 +48,21 @@ public class Account {
 
     public void setBalance(BigDecimal balance) {
         this.balance = balance;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Account account = (Account) o;
+        return clientId == account.clientId &&
+                Objects.equals(id, account.id) &&
+                Objects.equals(balance, account.balance) &&
+                status == account.status;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, clientId, balance, status);
     }
 }
