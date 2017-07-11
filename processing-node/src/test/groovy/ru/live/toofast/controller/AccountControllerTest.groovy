@@ -6,6 +6,7 @@ import org.junit.Assert
 import org.junit.Test
 import org.mockito.ArgumentMatchers
 import org.mockito.Mockito
+import ru.live.toofast.entity.ApplicationException
 import ru.live.toofast.entity.account.Account
 import ru.live.toofast.exception.AlreadyExistsException
 import ru.live.toofast.repository.AccountRepository
@@ -52,13 +53,29 @@ class AccountControllerTest extends JerseyTest {
 
 
     @Test
-    public void "Store account and return it with the id"() {
+    public void "Store account: exception is thrown if it already exists"() {
         Account account = new Account();
-        account.setClientId(22);
-        when(accountRepository.store(ArgumentMatchers.any(Account))).thenThrow(new AlreadyExistsException())
+        account.setId(1L);
+        when(accountRepository.contains(1L)).thenThrow(new AlreadyExistsException("Account already exists"))
         Entity<Account> entity = new Entity<>(account, MediaType.APPLICATION_JSON_TYPE);
-        Response exception = target("/account").request().post(entity)
+        Response response = target("/account").request().post(entity)
+        ApplicationException applicationException = response.readEntity(ApplicationException)
+        Assert.assertEquals(409, response.status )
+        Assert.assertEquals("Account already exists", applicationException.message )
+        Assert.assertEquals(AlreadyExistsException.name, applicationException.type)
+    }
 
-        println "sss"
+
+    @Test
+    public void "Store account: account can be stored"() {
+        Account account = new Account();
+        account.setId(1L);
+        when(accountRepository.store(ArgumentMatchers.eq(account))).thenReturn(account)
+        Entity<Account> entity = new Entity<>(account, MediaType.APPLICATION_JSON_TYPE);
+
+        Response response = target("/account").request().post(entity)
+        Account responseAccount = response.readEntity(Account)
+        Assert.assertEquals(201, response.status )
+        Assert.assertEquals(1L, responseAccount.id)
     }
 }

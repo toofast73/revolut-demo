@@ -7,6 +7,7 @@ import com.google.common.util.concurrent.MoreExecutors
 import org.apache.ignite.Ignite
 import org.apache.ignite.IgniteAtomicSequence
 import org.apache.ignite.Ignition
+import ru.live.toofast.PaymentProcessingApplication
 import ru.live.toofast.cache.CacheConfigurations
 import ru.live.toofast.entity.account.Account
 import ru.live.toofast.entity.account.AccountStatus
@@ -39,22 +40,14 @@ class MoneyTransferServiceTest extends Specification {
     Cache<Long, Payment> payments = ignite.getOrCreateCache(CacheConfigurations.paymentCacheConfiguration());
     @Shared
     Cache<Long, TransactionEntry> transactions = ignite.getOrCreateCache(CacheConfigurations.transactionCacheConfiguration());
-    AccountRepository accountRepository = new AccountRepository(accounts, sequence);
+    AccountRepository accountRepository = new AccountRepository(accounts, PaymentProcessingApplication.accountSequence());
 
-    IgniteAtomicSequence paymentSequence = ignite.atomicSequence(
-            "paymentSequence",
-            0,
-            true
-    );
 
-    IgniteAtomicSequence transactionSequence = ignite.atomicSequence(
-            "transactionSequence",
-            0,
-            true
-    );
 
-    PaymentRepository paymentRepository = new PaymentRepository(payments, paymentSequence);
-    TransactionRepository transactionRepository = new TransactionRepository(transactions, transactionSequence)
+
+
+    PaymentRepository paymentRepository = new PaymentRepository(payments, PaymentProcessingApplication.paymentSequence());
+    TransactionRepository transactionRepository = new TransactionRepository(transactions, PaymentProcessingApplication.transactionSequence())
 
     MoneyTransferService moneyTransferService = new MoneyTransferService(accountRepository, paymentRepository, transactionRepository, new FeeService());
 
@@ -157,9 +150,9 @@ class MoneyTransferServiceTest extends Specification {
     def "A series of transfers"(){
 
         setup:
-        Account first = new Account(4444, 1, AccountStatus.ACTIVE);
+        Account first = new Account(4444, 1, BigDecimal.ZERO, AccountStatus.ACTIVE);
         first.increaseBalance(new BigDecimal(250.0))
-        Account second = new Account(5555, 1, AccountStatus.ACTIVE);
+        Account second = new Account(5555, 1, BigDecimal.ZERO, AccountStatus.ACTIVE);
         first.increaseBalance(new BigDecimal(250.0))
         accounts.put(first.getId(), first)
         accounts.put(second.getId(), second)
@@ -219,7 +212,7 @@ class MoneyTransferServiceTest extends Specification {
         List<Account> result = []
         quantity.times {
             long index = it;
-            Account account = new Account(index, 1, AccountStatus.ACTIVE)
+            Account account = new Account(index, 1, BigDecimal.ZERO, AccountStatus.ACTIVE)
             account.increaseBalance(new BigDecimal(10000.0))
             result.add(account)
             accounts.put(index, account)

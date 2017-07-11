@@ -13,9 +13,9 @@ class FeeServiceTest extends Specification {
 
         given:
         FeeService feeService = new FeeService()
-        Account source = new Account(1, 2, AccountStatus.ACTIVE);
+        Account source = new Account(1, 2, BigDecimal.ZERO, AccountStatus.ACTIVE);
         source.increaseBalance(BigDecimal.TEN);
-        Account destination = new Account(2, 3, AccountStatus.ACTIVE);
+        Account destination = new Account(2, 3, BigDecimal.ZERO, AccountStatus.ACTIVE);
         Payment payment = new Payment(1, 1, 2, BigDecimal.TEN)
 
         when:

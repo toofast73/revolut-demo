@@ -10,6 +10,16 @@ public class Account {
     private BigDecimal balance;
     private AccountStatus status;
 
+    public Account(Long id, long clientId, BigDecimal balance, AccountStatus status) {
+        this.id = id;
+        this.clientId = clientId;
+        this.balance = balance;
+        this.status = status;
+    }
+
+    public Account() {
+    }
+
     public Long getId() {
         return id;
     }

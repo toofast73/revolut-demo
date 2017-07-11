@@ -59,6 +59,22 @@ public class PaymentProcessingApplication {
         );
     }
 
+    private static IgniteAtomicSequence paymentSequence() {
+        return Ignition.ignite().atomicSequence(
+                "paymentSequence",
+                0,
+                true
+        );
+    }
+
+    private static IgniteAtomicSequence transactionSequence() {
+        return Ignition.ignite().atomicSequence(
+                "transactionSequence",
+                0,
+                true
+        );
+    }
+
     private static Cache<Long, Account> accountIgniteCache() {
         return Ignition.ignite().getOrCreateCache(CacheConfigurations.accountCacheConfiguration());
     }
