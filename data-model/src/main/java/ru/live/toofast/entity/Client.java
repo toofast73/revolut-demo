@@ -5,6 +5,10 @@ import java.util.Date;
 
 import static java.time.LocalDateTime.now;
 
+/**
+ * The entity stub for Client.
+ * Is not used in business logic at the moment.
+ */
 public class Client {
 
     private final long id;

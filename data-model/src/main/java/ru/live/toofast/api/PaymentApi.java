@@ -11,6 +11,9 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
+/**
+ * PUT/DELETE/GET_ALL operations are not implemented, because at the moment there is no need for them.
+ */
 @Path("/payment")
 public interface PaymentApi {
 

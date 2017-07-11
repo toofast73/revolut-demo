@@ -65,14 +65,14 @@ class PaymentServiceTest extends Specification {
         TransactionEntry sourceEntry = sourceAccountTransactions.first()
         sourceEntry.accountId == accountList.first().id
         sourceEntry.paymentId == payment.id
-        sourceEntry.type == PaymentDirection.PAY
+        sourceEntry.direction == PaymentDirection.PAY
         sourceEntry.amount == payment.amount
 
         List<TransactionEntry> destinationAccountTransactions = transactionRepository.getByAccountId(accountList.last().id)
         TransactionEntry first = destinationAccountTransactions.first()
         first.accountId == accountList.last().id
         first.paymentId == payment.id
-        first.type == PaymentDirection.RECEIVE
+        first.direction == PaymentDirection.RECEIVE
         first.amount == payment.amount
     }
 

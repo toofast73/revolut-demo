@@ -6,6 +6,10 @@ import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.Objects;
 
+/**
+ * Money transfer request.
+ *
+ */
 public class Payment {
 
     private Long id;
@@ -17,6 +21,7 @@ public class Payment {
     @NotNull
     private BigDecimal amount;
 
+    //The cost of the operation. Charged from client by the processing system.
     private BigDecimal fee;
 
     private PaymentStatus status;

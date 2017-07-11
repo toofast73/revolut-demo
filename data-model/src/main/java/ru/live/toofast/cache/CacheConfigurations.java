@@ -6,6 +6,10 @@ import ru.live.toofast.entity.account.Account;
 import ru.live.toofast.entity.payment.Payment;
 import ru.live.toofast.entity.payment.TransactionEntry;
 
+/**
+ * Configuration for entity tables.
+ * AtomicityMode set to TRANSACTIONAL to activate transactions support.
+ */
 public class CacheConfigurations {
 
     public static CacheConfiguration accountCacheConfiguration() {

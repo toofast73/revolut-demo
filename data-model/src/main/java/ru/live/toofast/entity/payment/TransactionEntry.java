@@ -4,6 +4,18 @@ import org.apache.ignite.cache.query.annotations.QuerySqlField;
 
 import java.math.BigDecimal;
 
+/**
+ * Atomic representation of the account-related transaction.
+ *
+ * For example, if client add an amount of cash to the account via ATM it is one TransactionEntry with direction RECEIVE.
+ *
+ * If we transfer money between two accounts we have two legs:
+ * Source-account      has TransactionEntry with direction PAY
+ * Destination-account has TransactionEntry with direction RECEIVE
+ *
+ * May be used to compose Account balance history.
+ * AccountBalance == Sum(RECEIVE) - Sum(PAY)
+ */
 public class TransactionEntry {
 
     long id;
@@ -16,14 +28,14 @@ public class TransactionEntry {
 
     BigDecimal amount;
 
-    PaymentDirection type;
+    PaymentDirection direction;
 
-    public TransactionEntry(long id, long paymentId, long accountId, BigDecimal amount, PaymentDirection type) {
+    public TransactionEntry(long id, long paymentId, long accountId, BigDecimal amount, PaymentDirection direction) {
         this.id = id;
         this.paymentId = paymentId;
         this.accountId = accountId;
         this.amount = amount;
-        this.type = type;
+        this.direction = direction;
     }
 
     public long getId() {
@@ -42,7 +54,7 @@ public class TransactionEntry {
         return amount;
     }
 
-    public PaymentDirection getType() {
-        return type;
+    public PaymentDirection getDirection() {
+        return direction;
     }
 }

@@ -1,10 +1,26 @@
 package ru.live.toofast.entity;
 
+/**
+ * The wrapper for WebApplicationExceptions.
+ * Used to return exception-response-body, when things go nasty.
+ */
 public class ApplicationException {
 
+    /**
+     * User-friendly error message
+     */
     private String message;
+    /**
+     * Exception class
+     */
     private String type;
+    /**
+     * Verbal representation of the HTTP code
+     */
     private String status;
+    /**
+     * HTTP code
+     */
     private long statusCode;
 
     public ApplicationException(String message, String type, String status, long statusCode) {

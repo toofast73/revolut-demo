@@ -3,10 +3,14 @@ package ru.live.toofast.entity.account;
 import java.math.BigDecimal;
 import java.util.Objects;
 
+/**
+ * User account
+ */
 public class Account {
-
     private Long id;
     private long clientId;
+
+    //Account balance. The amount of money, available for transfers.
     private BigDecimal balance;
     private AccountStatus status;
 
