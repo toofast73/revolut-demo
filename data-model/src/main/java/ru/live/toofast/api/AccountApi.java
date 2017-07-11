@@ -29,6 +29,6 @@ public interface AccountApi  {
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    Response store(@Valid Account account);
+    Response create(@Valid Account account);
 
 }

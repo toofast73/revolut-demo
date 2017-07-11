@@ -68,7 +68,7 @@ public class PaymentControllerTest extends JerseyTest{
     public void "Store account: account can be stored"() {
         Account account = new Account();
         account.setId(1L);
-        when(accountRepository.store(ArgumentMatchers.eq(account))).thenReturn(account)
+        when(accountRepository.create(ArgumentMatchers.eq(account))).thenReturn(account)
         Entity<Account> entity = new Entity<>(account, MediaType.APPLICATION_JSON_TYPE);
 
         Response response = target("/account").request().post(entity)

@@ -20,12 +20,7 @@ task oneJar(type: OneJar) {
 dependencies {
     compile project(':data-model')
 
-    compile group: 'org.apache.ignite', name: 'ignite-core', version: '2.0.0'
-    compile group: 'org.apache.ignite', name: 'ignite-indexing', version: '2.0.0'
-
-    testCompile "org.codehaus.groovy:groovy-all:2.4.10"
-    testCompile "org.spockframework:spock-core:1.1-groovy-2.4"
-    testCompile group: 'junit', name: 'junit', version: '4.12'
+    compile libs.ignite
 }
 
 buildscript {

@@ -31,7 +31,11 @@ public class PaymentService {
         this.feeService = feeService;
     }
 
-    public Payment processPayment(Payment payment){
+    /**
+     * Execute the payment -- transfer money between two accounts.
+     * It's executed in a transaction and protected from concurrent access via pessimistic locking.
+     */
+    public Payment processPayment(Payment payment) {
         try (Transaction tx = Ignition.ignite().transactions().txStart(TransactionConcurrency.PESSIMISTIC, TransactionIsolation.REPEATABLE_READ)) {
             paymentRepository.store(payment);
 
@@ -39,7 +43,9 @@ public class PaymentService {
             Account source = sourceAndDestination.getLeft();
             Account destination = sourceAndDestination.getRight();
             BigDecimal amount = payment.getAmount();
+
             validateAccounts(source, destination, amount);
+
             source.decreaseBalance(amount);
             destination.increaseBalance(amount);
 
@@ -57,24 +63,27 @@ public class PaymentService {
         }
     }
 
+    /**
+     * Check that both accounts exist, are ACTIVE and source account have enough money to fund the transfer.
+     */
     private void validateAccounts(Account source, Account destination, BigDecimal amount) {
         validate(source);
         validate(destination);
 
-        if(source.getBalance().compareTo(amount) < 0){
+        if (source.getBalance().compareTo(amount) < 0) {
             throw new NotEnoughFundsException(String.format("Account %s has not enough funds", source.getId()));
         }
     }
 
     private void validate(Account account) {
-        if(account.getStatus() != AccountStatus.ACTIVE){
+        if (account.getStatus() != AccountStatus.ACTIVE) {
             throw new AccountValidationException(String.format("Account %s is not ACTIVE", account.getId()));
         }
     }
 
     public Payment getPaymentStatus(long paymentId) {
-        if(!paymentRepository.contains(paymentId)){
-            throw new EntityNotFoundException(String.format("Payment with id %s was not found", paymentId ));
+        if (!paymentRepository.contains(paymentId)) {
+            throw new EntityNotFoundException(String.format("Payment with id %s was not found", paymentId));
         }
         return paymentRepository.get(paymentId);
     }

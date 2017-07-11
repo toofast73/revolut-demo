@@ -8,7 +8,6 @@ apply plugin: 'gradle-one-jar'
 
 sourceCompatibility = 1.8
 
-
 repositories {
     maven { url "http://sbtatlas.sigma.sbrf.ru/nexus/content/groups/dbofi/" }
 }
@@ -27,26 +26,10 @@ task oneJar(type: OneJar) {
 }
 
 dependencies {
-
     compile project(':data-model')
-    compile group: 'org.eclipse.jetty', name: 'jetty-server', version: '9.4.6.v20170531'
-    compile group: 'org.eclipse.jetty', name: 'jetty-servlet', version: '9.4.6.v20170531'
-    compile group: 'org.apache.commons', name: 'commons-lang3', version: '3.6'
-    compile group: 'org.glassfish.jersey.core', name: 'jersey-server', version: '2.25.1'
-    compile group: 'org.glassfish.jersey.containers', name: 'jersey-container-servlet-core', version: '2.25.1'
-    compile group: 'org.glassfish.jersey.containers', name: 'jersey-container-jetty-http', version: '2.25.1'
-    compile group: 'org.glassfish.jersey.media', name: 'jersey-media-json-jackson', version: '2.25.1'
-    compile group: 'org.glassfish.jersey.media', name: 'jersey-media-json-processing', version: '2.25.1'
-    compile group: 'org.glassfish.jersey.ext', name: 'jersey-bean-validation', version: '2.25.1'
-
-    compile group: 'com.google.guava', name: 'guava', version: '22.0'
-    compile group: 'org.apache.ignite', name: 'ignite-indexing', version: '2.0.0'
-    compile group: 'org.apache.ignite', name: 'ignite-core', version: '2.0.0'
-
-    testCompile 'org.mockito:mockito-core:2.8.47'
-    testCompile group: 'org.glassfish.jersey.test-framework.providers', name: 'jersey-test-framework-provider-grizzly2', version: '2.25.1'
-    testCompile group: 'org.glassfish.jersey.test-framework', name: 'jersey-test-framework-core', version: '2.25.1'
-    testCompile "org.codehaus.groovy:groovy-all:2.4.10"
-    testCompile "org.spockframework:spock-core:1.1-groovy-2.4"
-    testCompile group: 'junit', name: 'junit', version: '4.12'
+    compile libs.jetty
+    compile libs.jersey
+    compile libs.utils
+    compile libs.ignite
+    testCompile libs.test
 }

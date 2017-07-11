@@ -6,6 +6,9 @@ import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
+/**
+ * Account failed to pass validation constraints and can't participate in money transfers.
+ */
 public class AccountValidationException extends WebApplicationException {
     private static final Response.Status STATUS = Response.Status.BAD_REQUEST;
 

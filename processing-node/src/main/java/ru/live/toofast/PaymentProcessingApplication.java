@@ -29,8 +29,12 @@ public class PaymentProcessingApplication {
     private static final int DEFAULT_PORT = 2222;
 
     public static void main(String[] args) {
-        Ignition.getOrStart(clientNodeConfig());
+        startCacheClient();
 
+        startHttpServer(args);
+    }
+
+    private static void startHttpServer(String[] args) {
         int port = determinePort(args);
 
         ResourceConfig config = getResourceConfig();
@@ -51,6 +55,13 @@ public class PaymentProcessingApplication {
         }
     }
 
+    private static void startCacheClient() {
+        Ignition.getOrStart(clientNodeConfig());
+    }
+
+    /**
+     * HTTP port is taken from application arguments. 2222 is used by default.
+     */
     private static int determinePort(String[] args) {
         Integer port = DEFAULT_PORT;
 
@@ -84,6 +95,10 @@ public class PaymentProcessingApplication {
     }
 
 
+    /**
+     * setClientMode(true) means, that processing-node won't store any data.
+     * It's made to separate the responsibilities between storage and processing nodes.
+     */
     private static IgniteConfiguration clientNodeConfig(){
         IgniteConfiguration config = new IgniteConfiguration();
         config.setClientMode(true);
@@ -94,6 +109,10 @@ public class PaymentProcessingApplication {
         return new AccountRepository(accountIgniteCache(), accountSequence());
     }
 
+    /**
+     * ID-generator for Accounts. The sequence is shared in cluster and ID uniqueness is guaranteed.
+     * Unlike UUID it is protected from fluctuations and divine intervention.
+     */
     private static IgniteAtomicSequence accountSequence() {
         return Ignition.ignite().atomicSequence(
                 "accountSequence",

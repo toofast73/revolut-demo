@@ -7,7 +7,7 @@ import org.apache.ignite.configuration.IgniteConfiguration;
 
 /**
  * This is an instance of the distributed cache cluster.
- * Its function is to store data (in memory) and provide it via javax.cache.Cache interface and SQL-like queries.
+ * Its function is to create data (in memory) and provide it via javax.cache.Cache interface and SQL-like queries.
  *
  * Local instances automagically join into the cluster.
  *

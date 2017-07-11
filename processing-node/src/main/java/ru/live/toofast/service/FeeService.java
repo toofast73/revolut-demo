@@ -6,6 +6,12 @@ import ru.live.toofast.exception.FeeException;
 
 import java.math.BigDecimal;
 
+/**
+ * The most simple fee calculation strategy.
+ * It charges $1 per each payment.
+ *
+ * In this simple example a fee is just charged. It is not transferred to a specific charge-off account.
+ */
 public class FeeService {
 
     public void collectFee(Payment payment, Account source, Account destination) {

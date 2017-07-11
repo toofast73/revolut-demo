@@ -6,6 +6,9 @@ import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
+/**
+ * Entity with such an id ALREADY EXISTS in the storage.
+ */
 public class AlreadyExistsException extends WebApplicationException {
     private static final Response.Status STATUS = Response.Status.CONFLICT;
 

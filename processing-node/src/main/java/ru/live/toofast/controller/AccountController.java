@@ -11,6 +11,11 @@ import javax.ws.rs.core.Response;
 import static javax.ws.rs.core.Response.Status.CREATED;
 
 
+/**
+ * Controller for operations with Accounts.
+ *
+ * PUT/DELETE/GET_ALL operations are not implemented, because at the moment there is no need for them.
+ */
 public class AccountController implements AccountApi {
 
     private final AccountRepository accountRepository;
@@ -29,8 +34,12 @@ public class AccountController implements AccountApi {
         }
     }
 
+    /**
+     * Create if absent.
+     * Throw AlreadyExistsException, if already exists
+     */
     @Override
-    public Response store(Account account) {
+    public Response create(Account account) {
         Long accountId = account.getId();
         if (accountId != null && accountRepository.contains(accountId)) {
             throw new AlreadyExistsException(String.format("Account with id %s already exists", accountId));

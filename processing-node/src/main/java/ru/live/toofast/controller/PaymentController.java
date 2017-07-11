@@ -6,7 +6,9 @@ import ru.live.toofast.service.PaymentService;
 
 import javax.validation.Valid;
 
-
+/**
+ * PUT/DELETE/GET_ALL operations are not implemented, because at the moment there is no need for them.
+ */
 public class PaymentController implements PaymentApi {
 
     private final PaymentService paymentService;
@@ -16,7 +18,7 @@ public class PaymentController implements PaymentApi {
     }
 
     @Override
-    public Payment getPaymentStatus(long paymentId) {
+    public Payment get(long paymentId) {
          return paymentService.getPaymentStatus(paymentId);
     }
 

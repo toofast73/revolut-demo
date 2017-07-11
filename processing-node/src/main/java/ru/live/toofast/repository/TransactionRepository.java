@@ -13,6 +13,10 @@ import ru.live.toofast.entity.payment.TransactionEntry;
 import javax.annotation.Nullable;
 import java.util.List;
 
+/**
+ * DAO for Payments.
+ * Uses IgniteCache as a backing implementation.
+ */
 public class TransactionRepository {
 
     private final IgniteCache<Long, TransactionEntry> transactions;
@@ -30,16 +34,24 @@ public class TransactionRepository {
         transactions.put(receive.getId(), receive);
     }
 
-    public List<TransactionEntry> getByPaymentId(long paymentId) {
-        SqlQuery sql = new SqlQuery(TransactionEntry.class, "paymentId = ?");
-
-        return toList(transactions.query(sql.setArgs(paymentId)).getAll());
-    }
-
+    /**
+     * Ignite allows you to make SQL-like queries over the distributed in-memory cache.
+     * Here we het all transaction-entries related to an account.
+     */
     public List<TransactionEntry> getByAccountId(long accountId) {
         SqlQuery sql = new SqlQuery(TransactionEntry.class, "accountId = ?");
 
         return toList(transactions.query(sql.setArgs(accountId)).getAll());
+    }
+
+
+    /**
+     * Get all transaction-entries produced by specific payment.
+     */
+    public List<TransactionEntry> getByPaymentId(long paymentId) {
+        SqlQuery sql = new SqlQuery(TransactionEntry.class, "paymentId = ?");
+
+        return toList(transactions.query(sql.setArgs(paymentId)).getAll());
     }
 
     private List<TransactionEntry> toList(List<CacheEntryImpl> input) {

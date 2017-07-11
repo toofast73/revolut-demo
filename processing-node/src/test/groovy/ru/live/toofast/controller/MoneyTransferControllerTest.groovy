@@ -19,6 +19,7 @@ import javax.ws.rs.core.Application
 import javax.ws.rs.core.MediaType
 import javax.ws.rs.core.Response
 
+import static org.mockito.ArgumentMatchers.eq
 import static org.mockito.Mockito.when
 
 public class MoneyTransferControllerTest extends JerseyTest{
@@ -35,9 +36,8 @@ public class MoneyTransferControllerTest extends JerseyTest{
 
     @Test
     public void "Payments: if account is not valid (blocked, deleted) the BAD_REQUEST_400 is returned"() {
-        Payment payment = new Payment(1, 2, 3, BigDecimal.ZERO);
-
-        when(paymentService.processPayment(ArgumentMatchers.eq(payment))).thenThrow(new AccountValidationException("Not Valid"))
+        Payment payment = new Payment(id: 1, sourceAccountId: 2, destinationAccountId: 3, amount: BigDecimal.ZERO);
+        when(paymentService.processPayment(eq(payment))).thenThrow(new AccountValidationException("Not Valid"))
 
         Entity<Account> entity = new Entity<>(payment, MediaType.APPLICATION_JSON_TYPE);
         Response response = target("/payment").request().post(entity)

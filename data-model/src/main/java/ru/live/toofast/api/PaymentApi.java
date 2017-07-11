@@ -12,17 +12,27 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
 /**
+ * Controller for money transfers.
+ *
+ *
+ *
  * PUT/DELETE/GET_ALL operations are not implemented, because at the moment there is no need for them.
  */
 @Path("/payment")
 public interface PaymentApi {
 
+    /**
+     * Get payment by id. Used to check current status of the payment.
+     */
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     @Path("{paymentId}")
-    Payment getPaymentStatus(@PathParam("paymentId") long paymentId);
+    Payment get(@PathParam("paymentId") long paymentId);
 
 
+    /**
+     * Money transfer request. Between two accounts.
+     */
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)

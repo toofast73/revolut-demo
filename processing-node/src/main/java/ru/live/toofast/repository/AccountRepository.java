@@ -10,6 +10,10 @@ import ru.live.toofast.exception.EntityNotFoundException;
 
 import javax.cache.Cache;
 
+/**
+ * DAO for Accounts.
+ * Uses IgniteCache as a backing implementation.
+ */
 public class AccountRepository {
 
     private final Cache<Long, Account> accounts;
@@ -21,6 +25,11 @@ public class AccountRepository {
     }
 
 
+    /**
+     * When executed in a transaction .get() locks the cache entry.
+     * Locks are acquired in the same order as .get() or .put() invoked.
+     * So, we need to keep the same account access order to avoid deadlocks in a concurrent environment.
+     */
     public Pair<Account, Account> getAccounts(Payment payment) {
         long sourceAccountId = payment.getSourceAccountId();
         long destinationAccountId = payment.getDestinationAccountId();

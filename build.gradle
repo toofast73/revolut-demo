@@ -2,15 +2,12 @@ group 'ru.live.toofast'
 version '1.0-SNAPSHOT'
 
 apply plugin: 'java'
+apply from: "dependencies.gradle"
 
 sourceCompatibility = 1.8
 
 repositories {
     maven { url 'http://sbtatlas.sigma.sbrf.ru/nexus/content/groups/dbofi/' }
-}
-
-dependencies {
-    testCompile group: 'junit', name: 'junit', version: '4.12'
 }
 
 buildscript {
@@ -19,7 +16,7 @@ buildscript {
     }
 }
 
-/*task wrapper(type: Wrapper) {
+task wrapper(type: Wrapper) {
     gradleVersion = '4.1'
-}*/
+}
 

@@ -1,0 +1,39 @@
+def jettyVer = "9.4.6.v20170531"
+def jerseyVer = "2.25.1"
+def igniteVer = "2.0.0"
+ext {
+
+    libs = [
+            jettyServer : "org.eclipse.jetty:jetty-server:$jettyVer",
+            jettyServlet: "org.eclipse.jetty:jetty-servlet:$jettyVer",
+
+            jerseyServer: "org.glassfish.jersey.core:jersey-server:$jerseyVer",
+            jerseyContainerServletCore: "org.glassfish.jersey.containers:jersey-container-servlet-core:$jerseyVer",
+            jerseyContainerJettyHttp: "org.glassfish.jersey.containers:jersey-container-jetty-http:$jerseyVer",
+            jerseyMediaJsonJackson: "org.glassfish.jersey.media:jersey-media-json-jackson:$jerseyVer",
+            jerseyMediaJsonProcessing: "org.glassfish.jersey.media:jersey-media-json-processing:$jerseyVer",
+            jerseyBeanValidation: "org.glassfish.jersey.ext:jersey-bean-validation:$jerseyVer",
+
+            commonsLang3: "org.apache.commons:commons-lang3:3.6",
+            guava: "com.google.guava:guava:22.0",
+
+            igniteIndexing: "org.apache.ignite:ignite-indexing:$igniteVer",
+            igniteCore: "org.apache.ignite:ignite-core:$igniteVer",
+
+            mockitoCore: "org.mockito:mockito-core:2.8.47",
+            jerseyTestFrameworkProviderGrizzly2: "org.glassfish.jersey.test-framework.providers:jersey-test-framework-provider-grizzly2:$jerseyVer",
+            jerseyTestFrameworkCore: "org.glassfish.jersey.test-framework:jersey-test-framework-core:$jerseyVer",
+            groovyAll: "org.codehaus.groovy:groovy-all:2.4.10",
+            spockCore: "org.spockframework:spock-core:1.1-groovy-2.4",
+            junit: "junit:junit:4.12"
+    ]
+
+    libs.jersey = [libs.jerseyServer, libs.jerseyContainerServletCore, libs.jerseyContainerJettyHttp,
+                   libs.jerseyMediaJsonJackson, libs.jerseyMediaJsonJackson, libs.jerseyMediaJsonProcessing, libs.jerseyBeanValidation]
+
+    libs.jetty = [libs.jettyServer, libs.jettyServlet]
+    libs.ignite = [libs.igniteCore, libs.igniteIndexing]
+    libs.utils = [libs.guava, libs.commonsLang3]
+    libs.test = [libs.mockitoCore, libs.jerseyTestFrameworkProviderGrizzly2, libs.jerseyTestFrameworkCore, libs.groovyAll, libs.spockCore, libs.junit]
+
+}

@@ -4,7 +4,10 @@ import org.apache.ignite.IgniteAtomicSequence;
 import ru.live.toofast.entity.payment.Payment;
 
 import javax.cache.Cache;
-
+/**
+ * DAO for Payments.
+ * Uses IgniteCache as a backing implementation.
+ */
 public class PaymentRepository {
 
     private final Cache<Long, Payment> payments;
