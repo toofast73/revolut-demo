@@ -2,6 +2,7 @@ group 'ru.live.toofast'
 version '1.0-SNAPSHOT'
 
 apply plugin: 'java'
+apply plugin: 'gradle-one-jar'
 
 sourceCompatibility = 1.8
 
@@ -10,6 +11,11 @@ repositories {
         maven { url "http://sbtatlas.sigma.sbrf.ru/nexus/content/groups/dbofi/" }
     }
 }
+
+task oneJar(type: OneJar) {
+    mainClass = 'ru.live.toofast.StorageNodeApplication'
+}
+
 
 dependencies {
     compile project(':data-model')
@@ -25,5 +31,8 @@ dependencies {
 buildscript {
     repositories {
         maven { url "http://10.21.25.52:8099/nexus/content/groups/dbofi/" }
+    }
+    dependencies {
+        classpath 'com.github.rholder:gradle-one-jar:1.0.4'
     }
 }

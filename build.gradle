@@ -18,3 +18,8 @@ buildscript {
         maven { url "http://sbtatlas.sigma.sbrf.ru/nexus/content/groups/dbofi/" }
     }
 }
+
+/*task wrapper(type: Wrapper) {
+    gradleVersion = '4.1'
+}*/
+

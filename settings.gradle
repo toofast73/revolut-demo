@@ -2,5 +2,4 @@ rootProject.name = 'revolut-demo'
 include 'cache-node'
 include 'processing-node'
 include 'data-model'
-include 'api-client'
 
