@@ -7,6 +7,10 @@ import spock.lang.Specification
 
 import javax.ws.rs.core.Application
 
+/**
+ * Both Spock and JerseyTest require you to extend their parent classes.
+ * Used composition as a workaround.
+ */
 abstract class JerseySpec extends Specification {
 
     abstract ResourceConfig config()

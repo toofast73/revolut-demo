@@ -4,14 +4,11 @@ import org.glassfish.jersey.server.ResourceConfig
 import org.glassfish.jersey.test.JerseyTest
 import org.junit.Assert
 import org.junit.Test
-import org.mockito.ArgumentMatcher
-import org.mockito.ArgumentMatchers
 import org.mockito.Mockito
 import ru.live.toofast.entity.ApplicationException
 import ru.live.toofast.entity.account.Account
 import ru.live.toofast.entity.payment.Payment
 import ru.live.toofast.exception.AccountValidationException
-import ru.live.toofast.repository.PaymentRepository
 import ru.live.toofast.service.PaymentService
 
 import javax.ws.rs.client.Entity

@@ -3,9 +3,6 @@ package ru.live.toofast.end.to.end
 import org.apache.ignite.Ignition
 import org.apache.ignite.configuration.IgniteConfiguration
 import org.glassfish.jersey.server.ResourceConfig
-import org.glassfish.jersey.test.JerseyTest
-import org.junit.Assert
-import org.junit.Test
 import ru.live.toofast.JerseySpec
 import ru.live.toofast.PaymentProcessingApplication
 import ru.live.toofast.entity.account.Account
@@ -14,7 +11,6 @@ import ru.live.toofast.entity.payment.Payment
 import ru.live.toofast.entity.payment.PaymentStatus
 
 import javax.ws.rs.client.Entity
-import javax.ws.rs.core.Application
 import javax.ws.rs.core.MediaType
 import javax.ws.rs.core.Response
 
