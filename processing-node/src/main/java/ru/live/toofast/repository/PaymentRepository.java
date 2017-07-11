@@ -19,4 +19,13 @@ public class PaymentRepository {
     public void store(Payment payment) {
         payments.put(payment.getId(), payment);
     }
+
+
+    public boolean contains(long paymentId){
+        return payments.containsKey(paymentId);
+    }
+
+    public Payment get(long paymentId) {
+        return payments.get(paymentId);
+    }
 }

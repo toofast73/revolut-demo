@@ -9,6 +9,7 @@ import ru.live.toofast.entity.account.Account;
 import ru.live.toofast.entity.account.AccountStatus;
 import ru.live.toofast.entity.payment.Payment;
 import ru.live.toofast.exception.AccountValidationException;
+import ru.live.toofast.exception.EntityNotFoundException;
 import ru.live.toofast.exception.NotEnoughFundsException;
 import ru.live.toofast.repository.AccountRepository;
 import ru.live.toofast.repository.PaymentRepository;
@@ -69,5 +70,12 @@ public class MoneyTransferService {
         if(account.getStatus() != AccountStatus.ACTIVE){
             throw new AccountValidationException(String.format("Account %s is not ACTIVE", account.getId()));
         }
+    }
+
+    public Payment getPayment(long paymentId) {
+        if(!paymentRepository.contains(paymentId)){
+            throw new EntityNotFoundException(String.format("Payment with id %s was not found", paymentId ));
+        }
+        return paymentRepository.get(paymentId);
     }
 }
