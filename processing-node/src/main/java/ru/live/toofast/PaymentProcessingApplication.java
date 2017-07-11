@@ -26,13 +26,17 @@ import javax.cache.Cache;
 
 public class PaymentProcessingApplication {
 
+    private static final int DEFAULT_PORT = 2222;
+
     public static void main(String[] args) {
         Ignition.getOrStart(clientNodeConfig());
+
+        int port = determinePort(args);
 
         ResourceConfig config = getResourceConfig();
         ServletHolder servlet = new ServletHolder(new ServletContainer(config));
 
-        Server server = new Server(2222);
+        Server server = new Server(port);
         ServletContextHandler context = new ServletContextHandler(server, "/*");
 
         context.addServlet(servlet, "/*");
@@ -45,6 +49,16 @@ public class PaymentProcessingApplication {
         } finally {
             server.destroy();
         }
+    }
+
+    private static int determinePort(String[] args) {
+        Integer port = DEFAULT_PORT;
+
+        if(args.length > 0 && args[0] != null){
+            port = Integer.valueOf(args[0]);
+        }
+
+        return port;
     }
 
     @NotNull

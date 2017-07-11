@@ -9,9 +9,6 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
-/**
- * Created by Yuri on 11.07.2017.
- */
 @Path("/account")
 public interface AccountApi  {
 

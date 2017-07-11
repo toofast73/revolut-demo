@@ -30,7 +30,7 @@ dependencies {
 
 buildscript {
     repositories {
-        maven { url "http://10.21.25.52:8099/nexus/content/groups/dbofi/" }
+        maven { url "http://sbtatlas.sigma.sbrf.ru/nexus/content/groups/dbofi/" }
     }
     dependencies {
         classpath 'com.github.rholder:gradle-one-jar:1.0.4'
