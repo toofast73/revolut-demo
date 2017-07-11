@@ -39,7 +39,7 @@ class MoneyTransferServiceTest extends Specification {
     Cache<Long, Payment> payments = ignite.getOrCreateCache(CacheConfigurations.paymentCacheConfiguration());
     @Shared
     Cache<Long, TransactionEntry> transactions = ignite.getOrCreateCache(CacheConfigurations.transactionCacheConfiguration());
-    AccountRepository accountRepository = new AccountRepository(accounts);
+    AccountRepository accountRepository = new AccountRepository(accounts, sequence);
 
     IgniteAtomicSequence paymentSequence = ignite.atomicSequence(
             "paymentSequence",

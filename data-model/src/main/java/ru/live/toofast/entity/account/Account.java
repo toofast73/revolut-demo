@@ -4,19 +4,12 @@ import java.math.BigDecimal;
 
 public class Account {
 
-    private final long id;
-    private final long clientId;
+    private Long id;
+    private long clientId;
     private BigDecimal balance;
     private AccountStatus status;
 
-    public Account(Long id, Long clientId, AccountStatus status) {
-        this.id = id;
-        this.clientId = clientId;
-        this.balance = BigDecimal.ZERO;
-        this.status = status;
-    }
-
-    public long getId() {
+    public Long getId() {
         return id;
     }
 
@@ -44,5 +37,15 @@ public class Account {
         this.status = status;
     }
 
+    public void setId(long id) {
+        this.id = id;
+    }
 
+    public void setClientId(long clientId) {
+        this.clientId = clientId;
+    }
+
+    public void setBalance(BigDecimal balance) {
+        this.balance = balance;
+    }
 }
