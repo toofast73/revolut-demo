@@ -33,10 +33,11 @@ public class PaymentService {
 
     public Payment processPayment(Payment payment){
         try (Transaction tx = Ignition.ignite().transactions().txStart(TransactionConcurrency.PESSIMISTIC, TransactionIsolation.REPEATABLE_READ)) {
+            paymentRepository.store(payment);
+
             Pair<Account, Account> sourceAndDestination = accountRepository.getAccounts(payment);
             Account source = sourceAndDestination.getLeft();
             Account destination = sourceAndDestination.getRight();
-
             BigDecimal amount = payment.getAmount();
             validateAccounts(source, destination, amount);
             source.decreaseBalance(amount);
@@ -47,11 +48,10 @@ public class PaymentService {
             accountRepository.store(source);
             accountRepository.store(destination);
 
-            transactionRepository.registerPayment(payment);
-
             payment.completed();
             paymentRepository.store(payment);
 
+            transactionRepository.registerPayment(payment);
             tx.commit();
             return payment;
         }

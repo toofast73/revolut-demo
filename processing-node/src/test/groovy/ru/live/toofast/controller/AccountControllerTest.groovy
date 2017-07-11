@@ -53,7 +53,7 @@ class AccountControllerTest extends JerseyTest {
         when(accountRepository.get(123)).thenReturn(account)
 
         Response response = target("/account/123").request().get()
-        Account responseAccount = response.readEntity(Account);
+        Account responseAccount = response.readEntity(Account)
         Assert.assertEquals(Response.Status.OK.statusCode, response.status );
         Assert.assertEquals(123, responseAccount.id );
     }

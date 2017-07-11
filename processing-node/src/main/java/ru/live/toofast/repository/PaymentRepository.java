@@ -15,8 +15,10 @@ public class PaymentRepository {
         this.sequence = sequence;
     }
 
-
     public void store(Payment payment) {
+        if(payment.getId() == null){
+            payment.setId(sequence.incrementAndGet());
+        }
         payments.put(payment.getId(), payment);
     }
 

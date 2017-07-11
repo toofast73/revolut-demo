@@ -32,7 +32,7 @@ public class AccountController implements AccountApi {
     @Override
     public Response store(Account account) {
         Long accountId = account.getId();
-        if (accountRepository.contains(accountId)) {
+        if (accountId != null && accountRepository.contains(accountId)) {
             throw new AlreadyExistsException(String.format("Account with id %s already exists", accountId));
         }
         Account stored = accountRepository.store(account);

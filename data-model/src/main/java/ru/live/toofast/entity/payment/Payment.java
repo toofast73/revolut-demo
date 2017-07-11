@@ -8,7 +8,7 @@ import java.util.Objects;
 
 public class Payment {
 
-    private long id;
+    private Long id;
 
     @NotNull
     private Long sourceAccountId;
@@ -25,7 +25,7 @@ public class Payment {
 
     private Date completedDate;
 
-    public Payment(long id, long sourceAccountId, long destinationAccountId, BigDecimal amount) {
+    public Payment(Long id, long sourceAccountId, long destinationAccountId, BigDecimal amount) {
         this.id = id;
         this.sourceAccountId = sourceAccountId;
         this.destinationAccountId = destinationAccountId;
@@ -64,7 +64,7 @@ public class Payment {
         this.completedDate = completedDate;
     }
 
-    public long getId() {
+    public Long getId() {
         return id;
     }
 

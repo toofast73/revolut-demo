@@ -5,9 +5,10 @@ import com.google.common.util.concurrent.ListenableFuture
 import com.google.common.util.concurrent.ListeningExecutorService
 import com.google.common.util.concurrent.MoreExecutors
 import org.apache.ignite.Ignite
+import org.apache.ignite.IgniteAtomicSequence
 import org.apache.ignite.Ignition
+import org.apache.ignite.configuration.IgniteConfiguration
 import ru.live.toofast.PaymentProcessingApplication
-import ru.live.toofast.cache.CacheConfigurations
 import ru.live.toofast.entity.account.Account
 import ru.live.toofast.entity.account.AccountStatus
 import ru.live.toofast.entity.payment.Payment
@@ -16,12 +17,9 @@ import ru.live.toofast.entity.payment.TransactionEntry
 import ru.live.toofast.exception.AccountValidationException
 import ru.live.toofast.exception.NotEnoughFundsException
 import ru.live.toofast.repository.AccountRepository
-import ru.live.toofast.repository.PaymentRepository
-import ru.live.toofast.repository.TransactionRepository
 import spock.lang.Shared
 import spock.lang.Specification
 
-import javax.cache.Cache
 import java.util.concurrent.Callable
 
 import static java.util.concurrent.Executors.newFixedThreadPool
@@ -29,41 +27,34 @@ import static java.util.concurrent.Executors.newFixedThreadPool
 class PaymentServiceTest extends Specification {
 
     @Shared
-    Ignite ignite = Ignition.start();
+    Ignite ignite = Ignition.getOrStart(new IgniteConfiguration())
 
     @Shared
-    Cache<Long, Account> accounts = ignite.getOrCreateCache(CacheConfigurations.accountCacheConfiguration());
+    AccountRepository accountRepository = PaymentProcessingApplication.accountRepository()
     @Shared
-    Cache<Long, Payment> payments = ignite.getOrCreateCache(CacheConfigurations.paymentCacheConfiguration());
-    @Shared
-    Cache<Long, TransactionEntry> transactions = ignite.getOrCreateCache(CacheConfigurations.transactionCacheConfiguration());
-    AccountRepository accountRepository = new AccountRepository(accounts, PaymentProcessingApplication.accountSequence());
+    TransactionRepository = PaymentProcessingApplication.transactionRepository();
 
+    PaymentService moneyTransferService = PaymentProcessingApplication.paymentService()
 
-
-
-
-    PaymentRepository paymentRepository = new PaymentRepository(payments, PaymentProcessingApplication.paymentSequence());
-    TransactionRepository transactionRepository = new TransactionRepository(transactions, PaymentProcessingApplication.transactionSequence())
-
-    PaymentService moneyTransferService = new PaymentService(accountRepository, paymentRepository, transactionRepository, new FeeService());
+    IgniteAtomicSequence accountSequence = PaymentProcessingApplication.accountSequence();
+    IgniteAtomicSequence paymentSequence = PaymentProcessingApplication.paymentSequence();
 
     ListeningExecutorService decorator = MoreExecutors.listeningDecorator(newFixedThreadPool(30));
 
     def "Transfer USD150 from one account to another"(){
 
         setup:
-        List<Account> accountList = generateAccounts(2, accounts)
+        List<Account> accountList = generateAccounts(2, accountRepository)
 
         when:
-        Payment payment = createPayment(100.0)
+        Payment payment = createPayment(accountList.first().id, accountList.last().id, 100.0)
 
         moneyTransferService.processPayment(payment)
 
 
         then:
-        accounts.get(0L).balance.doubleValue() == 9899.0;
-        accounts.get(1L).balance.doubleValue() == 10100.0;
+        accountRepository.get(accountList.first().id).balance.doubleValue() == 9899.0;
+        accountRepository.get(accountList.last().id).balance.doubleValue() == 10100.0;
         payment.getFee().doubleValue() == 1.0
 
         List<TransactionEntry> paymentTransactions = transactionRepository.getByPaymentId(payment.id)
@@ -72,7 +63,6 @@ class PaymentServiceTest extends Specification {
         List<TransactionEntry> sourceAccountTransactions = transactionRepository.getByAccountId(accountList.first().id)
         sourceAccountTransactions.size() == 1
         TransactionEntry sourceEntry = sourceAccountTransactions.first()
-        sourceEntry.id == 1;
         sourceEntry.accountId == accountList.first().id
         sourceEntry.paymentId == payment.id
         sourceEntry.type == PaymentDirection.PAY
@@ -80,7 +70,6 @@ class PaymentServiceTest extends Specification {
 
         List<TransactionEntry> destinationAccountTransactions = transactionRepository.getByAccountId(accountList.last().id)
         TransactionEntry first = destinationAccountTransactions.first()
-        first.id == 2;
         first.accountId == accountList.last().id
         first.paymentId == payment.id
         first.type == PaymentDirection.RECEIVE
@@ -92,10 +81,10 @@ class PaymentServiceTest extends Specification {
     def "If the balance is lower, than the transaction amount the exception is thrown"(){
 
         setup:
-        List<Account> accounts = generateAccounts(2, accounts)
+        List<Account> accountList = generateAccounts(2, accountRepository)
 
         when:
-        Payment payment = createPayment(999999999.0)
+        Payment payment = createPayment(accountList.first().id, accountList.last().id, 999999999.0)
 
         moneyTransferService.processPayment(payment)
 
@@ -107,13 +96,13 @@ class PaymentServiceTest extends Specification {
     def "If the source account is not ACTIVE the exception is thrown"(){
 
         setup:
-        List<Account> accountList = generateAccounts(2, accounts)
+        List<Account> accountList = generateAccounts(2, accountRepository)
         Account source = accountList.first();
         source.setStatus(AccountStatus.BLOCKED)
-        accounts.put(source.id, source);
+        accountRepository.store(source);
 
         when:
-        Payment payment = createPayment(100.0)
+        Payment payment = createPayment(accountList.first().id, accountList.last().id,100.0)
 
         moneyTransferService.processPayment(payment)
 
@@ -125,13 +114,13 @@ class PaymentServiceTest extends Specification {
     def "If the destination account is not ACTIVE the exception is thrown"(){
 
         setup:
-        List<Account> accountList = generateAccounts(2, accounts)
+        List<Account> accountList = generateAccounts(2, accountRepository)
         Account destination = accountList.last();
         destination.setStatus(AccountStatus.BLOCKED)
-        accounts.put(destination.id, destination);
+        accountRepository.store(destination);
 
         when:
-        Payment payment = createPayment(100.0)
+        Payment payment = createPayment(accountList.first().id, accountList.last().id,100.0)
 
         moneyTransferService.processPayment(payment)
 
@@ -140,8 +129,8 @@ class PaymentServiceTest extends Specification {
         thrown(AccountValidationException)
     }
 
-    private Payment createPayment(double amount) {
-        new Payment(1, 0L, 1L, new BigDecimal(amount))
+    private Payment createPayment(Long sourceId, Long destinationId, double amount) {
+        new Payment(paymentSequence.incrementAndGet(), sourceId, destinationId, new BigDecimal(amount))
     }
 
     def "A series of transfers"(){
@@ -151,8 +140,8 @@ class PaymentServiceTest extends Specification {
         first.increaseBalance(new BigDecimal(250.0))
         Account second = new Account(5555, 1, BigDecimal.ZERO, AccountStatus.ACTIVE);
         first.increaseBalance(new BigDecimal(250.0))
-        accounts.put(first.getId(), first)
-        accounts.put(second.getId(), second)
+        accountRepository.store(first)
+        accountRepository.store(second)
 
         when:
         def payments =
@@ -165,14 +154,14 @@ class PaymentServiceTest extends Specification {
         }
 
         then:
-        accounts.get(4444L).balance.doubleValue() == 248.0;
-        accounts.get(5555L).balance.doubleValue() == 249.0;
+        accountRepository.get(4444L).balance.doubleValue() == 248.0;
+        accountRepository.get(5555L).balance.doubleValue() == 249.0;
 
     }
 
     def "Concurrent payments: multiple MT between two accounts"(){
         setup:
-        List<Account> accountsList = generateAccounts(2, accounts)
+        List<Account> accountsList = generateAccounts(2, accountRepository)
         List<Callable<Payment>> tasks = generateMoneyTransferTasks(accountsList, 100)
 
         when:
@@ -180,23 +169,23 @@ class PaymentServiceTest extends Specification {
 
         then:
 
-        accounts.get(0L).balance.doubleValue() == 9900.0;
-        accounts.get(1L).balance.doubleValue() == 9900.0;
+        accountRepository.get(accountsList[0].id).balance.doubleValue() == 9900.0;
+        accountRepository.get(accountsList[1].id).balance.doubleValue() == 9900.0;
     }
 
 
 
     def "Concurrent payments: dining philosophers strike back"(){
         setup:
-        List<Account> accountsList = generateAccounts(10, accounts)
+        List<Account> accountsList = generateAccounts(10, accountRepository)
         List<Callable<Payment>> tasks = generateMoneyTransferTasks(accountsList, 100)
 
         when:
         executeTasks(tasks)
 
         then:
-        accounts.get(0L).balance.doubleValue() == 9900.0;
-        accounts.get(1L).balance.doubleValue() == 9900.0;
+        accountRepository.get(accountsList[0].id).balance.doubleValue() == 9900.0;
+        accountRepository.get(accountsList[1].id).balance.doubleValue() == 9900.0;
     }
 
     private void executeTasks(List<Callable<Payment>> tasks){
@@ -205,14 +194,19 @@ class PaymentServiceTest extends Specification {
         list.get();
     }
 
-    private List<Account> generateAccounts(long quantity, Cache<Long, Account> accounts) {
+    private List<Account> generateAccounts(long quantity, AccountRepository repository) {
         List<Account> result = []
+        List<Long> ids = []
         quantity.times {
+            ids << accountSequence.incrementAndGet();
+        }
+
+        ids.each {
             long index = it;
             Account account = new Account(index, 1, BigDecimal.ZERO, AccountStatus.ACTIVE)
             account.increaseBalance(new BigDecimal(10000.0))
             result.add(account)
-            accounts.put(index, account)
+            repository.store(account)
         }
         return result
     }
