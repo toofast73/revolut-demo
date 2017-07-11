@@ -3,6 +3,7 @@ package ru.live.toofast.api;
 import ru.live.toofast.entity.account.Account;
 
 import javax.servlet.http.HttpServletResponse;
+import javax.validation.Valid;
 import javax.ws.rs.*;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
@@ -17,12 +18,12 @@ public interface AccountApi  {
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     @Path("{accountId}")
-    Response get(@PathParam("accountId") long id);
+    Account get(@PathParam("accountId") long id);
 
 
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    Response store(Account account);
+    Response store(@Valid Account account);
 
 }

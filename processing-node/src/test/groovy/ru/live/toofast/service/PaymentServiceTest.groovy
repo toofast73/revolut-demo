@@ -5,7 +5,6 @@ import com.google.common.util.concurrent.ListenableFuture
 import com.google.common.util.concurrent.ListeningExecutorService
 import com.google.common.util.concurrent.MoreExecutors
 import org.apache.ignite.Ignite
-import org.apache.ignite.IgniteAtomicSequence
 import org.apache.ignite.Ignition
 import ru.live.toofast.PaymentProcessingApplication
 import ru.live.toofast.cache.CacheConfigurations
@@ -19,8 +18,6 @@ import ru.live.toofast.exception.NotEnoughFundsException
 import ru.live.toofast.repository.AccountRepository
 import ru.live.toofast.repository.PaymentRepository
 import ru.live.toofast.repository.TransactionRepository
-import ru.live.toofast.service.FeeService
-import ru.live.toofast.service.MoneyTransferService
 import spock.lang.Shared
 import spock.lang.Specification
 
@@ -29,7 +26,7 @@ import java.util.concurrent.Callable
 
 import static java.util.concurrent.Executors.newFixedThreadPool
 
-class MoneyTransferServiceTest extends Specification {
+class PaymentServiceTest extends Specification {
 
     @Shared
     Ignite ignite = Ignition.start();
@@ -49,7 +46,7 @@ class MoneyTransferServiceTest extends Specification {
     PaymentRepository paymentRepository = new PaymentRepository(payments, PaymentProcessingApplication.paymentSequence());
     TransactionRepository transactionRepository = new TransactionRepository(transactions, PaymentProcessingApplication.transactionSequence())
 
-    MoneyTransferService moneyTransferService = new MoneyTransferService(accountRepository, paymentRepository, transactionRepository, new FeeService());
+    PaymentService moneyTransferService = new PaymentService(accountRepository, paymentRepository, transactionRepository, new FeeService());
 
     ListeningExecutorService decorator = MoreExecutors.listeningDecorator(newFixedThreadPool(30));
 

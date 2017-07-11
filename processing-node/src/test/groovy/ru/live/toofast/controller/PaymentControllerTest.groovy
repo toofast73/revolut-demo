@@ -4,30 +4,27 @@ import org.glassfish.jersey.server.ResourceConfig
 import org.glassfish.jersey.test.JerseyTest
 import org.junit.Assert
 import org.junit.Test
-import org.mockito.ArgumentMatchers
 import org.mockito.Mockito
-import ru.live.toofast.entity.ApplicationException
-import ru.live.toofast.entity.account.Account
-import ru.live.toofast.exception.AlreadyExistsException
-import ru.live.toofast.repository.AccountRepository
+import ru.live.toofast.entity.payment.Payment
+import ru.live.toofast.repository.PaymentRepository
+import ru.live.toofast.service.PaymentService
 
-import javax.ws.rs.client.Entity
 import javax.ws.rs.core.Application
-import javax.ws.rs.core.MediaType
 import javax.ws.rs.core.Response
 
 import static org.mockito.Mockito.when
 
-class AccountControllerTest extends JerseyTest {
+public class PaymentControllerTest extends JerseyTest{
 
-    private AccountRepository accountRepository
+    private PaymentRepository paymentRepository;
+    private PaymentService paymentService;
 
     @Override
     protected Application configure() {
         ResourceConfig config = new ResourceConfig();
-
-        accountRepository = Mockito.mock(AccountRepository)
-        config.register(new AccountController(accountRepository));
+        paymentRepository = Mockito.mock(PaymentRepository);
+        paymentService = new PaymentService(null, paymentRepository, null, null);
+        config.register(new PaymentController(paymentService));
         return config;
     }
 
@@ -35,30 +32,24 @@ class AccountControllerTest extends JerseyTest {
 
     @Test
     public void 'Return 404_NOT_FOUND if account doesnt exist'() {
-        Response get = target("/account/222").request().get()
-        Assert.assertEquals(get.status, Response.Status.NOT_FOUND.statusCode);
-    }
-
-
-    @Test
-    public void 'Return METHOD_NOT_ALLOWED_405 if accountId is not provided'() {
-        Response get = target("/account").request().get()
-        Assert.assertEquals(get.status, Response.Status.METHOD_NOT_ALLOWED.statusCode);
+        Response get = target("/payment/222").request().get()
+        Assert.assertEquals(Response.Status.NOT_FOUND.statusCode, get.status);
     }
 
     @Test
-    public void "Return account if it exists"() {
-        Account account = new Account();
-        account.setId(123);
-        when(accountRepository.get(123)).thenReturn(account)
+    public void "Return payment if it exists"() {
+        Payment payment = new Payment(0, 0, 0, BigDecimal.ZERO);
 
-        Response response = target("/account/123").request().get()
-        Account responseAccount = response.readEntity(Account);
-        Assert.assertEquals(Response.Status.OK.statusCode, response.status );
-        Assert.assertEquals(123, responseAccount.id );
+        when(paymentRepository.contains(0)).thenReturn(true)
+        when(paymentRepository.get(0)).thenReturn(payment)
+
+        Response response = target("/payment/0").request().get()
+        Payment responsePayment = response.readEntity(Payment);
+        Assert.assertEquals(Response.Status.OK.statusCode, response.status);
+        Assert.assertEquals(0, responsePayment.id );
     }
 
-
+/*
     @Test
     public void "Store account: exception is thrown if it already exists"() {
         Account account = new Account();
@@ -84,5 +75,5 @@ class AccountControllerTest extends JerseyTest {
         Account responseAccount = response.readEntity(Account)
         Assert.assertEquals(201, response.status )
         Assert.assertEquals(1L, responseAccount.id)
-    }
+    }*/
 }

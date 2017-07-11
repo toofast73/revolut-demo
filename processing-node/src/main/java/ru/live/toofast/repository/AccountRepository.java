@@ -6,6 +6,7 @@ import org.apache.ignite.IgniteAtomicSequence;
 import ru.live.toofast.entity.account.Account;
 import ru.live.toofast.entity.payment.Payment;
 import ru.live.toofast.exception.AlreadyExistsException;
+import ru.live.toofast.exception.EntityNotFoundException;
 
 import javax.cache.Cache;
 
@@ -24,8 +25,12 @@ public class AccountRepository {
         long sourceAccountId = payment.getSourceAccountId();
         long destinationAccountId = payment.getDestinationAccountId();
 
+        verifyExistence(sourceAccountId);
+        verifyExistence(destinationAccountId);
+
         Account source;
         Account destination;
+
 
         if(sourceAccountId > destinationAccountId){
             source = accounts.get(sourceAccountId);
@@ -36,6 +41,12 @@ public class AccountRepository {
         }
 
         return new ImmutablePair<>(source, destination);
+    }
+
+    private void verifyExistence(long accountId) {
+        if (!contains(accountId)) {
+            throw new EntityNotFoundException(String.format("Account with id %s is not found", accountId));
+        }
     }
 
     public Account store(Account account) {

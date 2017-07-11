@@ -17,14 +17,14 @@ import ru.live.toofast.repository.TransactionRepository;
 
 import java.math.BigDecimal;
 
-public class MoneyTransferService {
+public class PaymentService {
 
     private final AccountRepository accountRepository;
     private final PaymentRepository paymentRepository;
     private final TransactionRepository transactionRepository;
     private final FeeService feeService;
 
-    public MoneyTransferService(AccountRepository accountRepository, PaymentRepository paymentRepository, TransactionRepository transactionRepository, FeeService feeService) {
+    public PaymentService(AccountRepository accountRepository, PaymentRepository paymentRepository, TransactionRepository transactionRepository, FeeService feeService) {
         this.accountRepository = accountRepository;
         this.paymentRepository = paymentRepository;
         this.transactionRepository = transactionRepository;
@@ -72,7 +72,7 @@ public class MoneyTransferService {
         }
     }
 
-    public Payment getPayment(long paymentId) {
+    public Payment getPaymentStatus(long paymentId) {
         if(!paymentRepository.contains(paymentId)){
             throw new EntityNotFoundException(String.format("Payment with id %s was not found", paymentId ));
         }

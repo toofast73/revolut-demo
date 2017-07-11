@@ -3,6 +3,7 @@ package ru.live.toofast.controller;
 import ru.live.toofast.api.AccountApi;
 import ru.live.toofast.entity.account.Account;
 import ru.live.toofast.exception.AlreadyExistsException;
+import ru.live.toofast.exception.EntityNotFoundException;
 import ru.live.toofast.repository.AccountRepository;
 
 import javax.ws.rs.core.Response;
@@ -19,12 +20,12 @@ public class AccountController implements AccountApi {
     }
 
     @Override
-    public Response get(long id) {
+    public Account get(long id) {
         Account account = accountRepository.get(id);
         if (account != null) {
-            return Response.ok(account).build();
+            return account;
         } else {
-            return Response.status(Response.Status.NOT_FOUND).build();
+            throw new EntityNotFoundException(String.format("Account with id %s is not found", id));
         }
     }
 
