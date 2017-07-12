@@ -12,8 +12,9 @@ API interfaces are AccountApi, AccountBalanceApi, PaymentApi.
 ##### Implementation details:
 1) Only necessary CRUD operations are implemented. I don't see the necessity to providy an access for all application data/operations to external systems.
 2) All payments are nominated is a single currency. There is no currency exchange, because exchange rates, spreads, currency providers are too complex, to be 'simple and to the point'.
-3) Services are covered with unit/integration tests. 
-4) Controllers are covered with unit(stubs instead of services) and end-to-end(real application with in memory cache instance) tests. The ignite-cache is required, because it handles transactions isolation logic.
+3) Test coverage is 85% (LoC)
+4) Services are covered with unit/integration tests. 
+5) Controllers are covered with unit(stubs instead of services) and end-to-end(real application with in memory cache instance) tests. The ignite-cache is required, because it handles transactions isolation logic.
  Transactions are implemented using Ignite cache features. See: PaymentService and https://apacheignite.readme.io/v2.0/docs/transactions
 
 ##### Scalability:
