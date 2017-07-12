@@ -115,7 +115,7 @@ public class AccountRepository {
     }
 
     public void linkPhone(long accountId, String phone){
-        accountsByCard.put(phone, accountId);
+        accountsByPhone.put(phone, accountId);
     }
 
 
