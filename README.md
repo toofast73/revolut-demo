@@ -1,6 +1,6 @@
 I have implemented the 'simple and to the point' API for money transfers between accounts.
 
-##### Features:
+#### Features:
 As an API user I am able to:
 1) Create new accounts
 2) Make payments, using accountId, linked phone or credit card number
@@ -10,7 +10,7 @@ Processing system charges a fee for the transaction.
 
 API interfaces are AccountApi, AccountBalanceApi, PaymentApi.
 
-##### Implementation details:
+#### Implementation details:
 1) Only necessary CRUD operations are implemented. I don't see the necessity to providy an access for all application data/operations to external systems.
 2) All payments are nominated is a single currency. There is no currency exchange, because exchange rates, spreads, currency providers are too complex, to be 'simple and to the point'.
 3) Test coverage is 85% (LoC)
@@ -21,7 +21,7 @@ API interfaces are AccountApi, AccountBalanceApi, PaymentApi.
  
  See: PaymentService and https://apacheignite.readme.io/v2.0/docs/transactions
 
-##### Scalability:
+#### Scalability:
 Application logic is divided into two layers:
 1) Stateful in-memory ignite cache nodes, united into a single in-memory data-cluster. 
 You can scale the load by adding more nodes.
@@ -31,7 +31,7 @@ They contain business logic and load data from cache cluster via Map.get() and S
 
 You can scale processing logic by adding more nodes (and balance http-requests between them)
 
-##### Durability:
+#### Durability:
 Cache node durability is provided via data redundancy. 
    Backup copies of cache entries are sharded across the cluster. 
    If one node fails -- other remain.  
@@ -40,7 +40,7 @@ Processing node durability is provided by its stateless nature.
 If one node fails -- load can be balanced to other ones. 
 
 
-##### How to build/run the application:
+#### How to build/run the application:
 1) Make standalone jars:  
    gradlew clean oneJar  
 
@@ -52,7 +52,7 @@ java -jar cache-node\build\libs\cache-node-1.0-SNAPSHOT-standalone.jar
    java -jar processing-node\build\libs\processing-node-1.0-SNAPSHOT-standalone.jar 8082  
 
 
-##### Technologies used:
+#### Technologies used:
    Java 8   
    Jetty, Jersey  
    Apache ignite  
