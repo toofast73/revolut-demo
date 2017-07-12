@@ -6,7 +6,8 @@ As an API user I am able to:
 2) Make payments, using accountId, linked phone or credit card number.
 3) Get account balance history 
 
-Processing system charges a fee for the transaction
+Processing system charges a fee for the transaction.
+
 API interfaces are AccountApi, AccountBalanceApi, PaymentApi.
 
 ##### Implementation details:
