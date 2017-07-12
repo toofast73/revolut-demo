@@ -32,13 +32,10 @@ You can scale processing logic by adding more nodes (and balance http-requests b
 
 ##### Durability:
 Cache node durability is provided via data redundency. 
-
 Backup copies of cache entries are sharded across the cluster. 
-
 If one node fails -- other remain.
 
 Processing node durability is provided by its stateless nature. 
-
 If one node fails -- load can be balanced to other ones. 
 
 
