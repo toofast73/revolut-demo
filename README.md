@@ -33,6 +33,17 @@ If one node fails -- other remain.
 Processing node durability is provided by its stateless nature. 
 If one node fails -- load can be balanced to other ones. 
 
+
+How to build/run the application:
+1) Make standalone jars
+gradlew clean oneJar
+2) Run as many cache nodes as you need:
+java -jar cache-node\build\libs\cache-node-1.0-SNAPSHOT-standalone.jar
+3)Run some processing nodes as you need:
+java -jar processing-node\build\libs\processing-node-1.0-SNAPSHOT-standalone.jar 8081
+java -jar processing-node\build\libs\processing-node-1.0-SNAPSHOT-standalone.jar 8082
+
+
 Technologies used:
 Java 8,
 Jetty, Jersey
