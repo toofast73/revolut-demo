@@ -34,6 +34,7 @@ public class PaymentService {
     /**
      * Execute the payment -- transfer money between two accounts.
      * It's executed in a transaction and protected from concurrent access via pessimistic locking.
+     * see: https://apacheignite.readme.io/v2.0/docs/transactions
      */
     public Payment processPayment(Payment payment) {
         try (Transaction tx = Ignition.ignite().transactions().txStart(TransactionConcurrency.PESSIMISTIC, TransactionIsolation.REPEATABLE_READ)) {

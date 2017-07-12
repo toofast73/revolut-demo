@@ -32,7 +32,7 @@ class PaymentServiceTest extends Specification {
     @Shared
     AccountRepository accountRepository = PaymentProcessingApplication.accountRepository()
     @Shared
-    TransactionRepository = PaymentProcessingApplication.transactionRepository();
+    TransactionRepository = PaymentProcessingApplication.balanceEntryRepository();
 
     PaymentService moneyTransferService = PaymentProcessingApplication.paymentService()
 
