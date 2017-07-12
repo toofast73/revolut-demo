@@ -59,7 +59,7 @@ java -jar cache-node\build\libs\cache-node-1.0-SNAPSHOT-standalone.jar
    Groovy, Spock  
    Gradle   
 
-Thought about using Spring Cloud(but it's prohibited) and Akka (http/data). Akka does not look 'simple and to the point' to me.
+Thought about using Spring Cloud(but it's prohibited) and Akka (http/data). Akka does not look *simple and to the point* to me.
 
 If you need any additional information -- feel free to ask me in telegram https://t.me/toofast73 and skype (toofast73).
 
