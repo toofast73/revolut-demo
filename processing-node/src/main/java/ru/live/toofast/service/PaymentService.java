@@ -13,7 +13,7 @@ import ru.live.toofast.exception.EntityNotFoundException;
 import ru.live.toofast.exception.NotEnoughFundsException;
 import ru.live.toofast.repository.AccountRepository;
 import ru.live.toofast.repository.PaymentRepository;
-import ru.live.toofast.repository.TransactionRepository;
+import ru.live.toofast.repository.BalanceEntryRepository;
 
 import java.math.BigDecimal;
 
@@ -21,13 +21,13 @@ public class PaymentService {
 
     private final AccountRepository accountRepository;
     private final PaymentRepository paymentRepository;
-    private final TransactionRepository transactionRepository;
+    private final BalanceEntryRepository balanceEntryRepository;
     private final FeeService feeService;
 
-    public PaymentService(AccountRepository accountRepository, PaymentRepository paymentRepository, TransactionRepository transactionRepository, FeeService feeService) {
+    public PaymentService(AccountRepository accountRepository, PaymentRepository paymentRepository, BalanceEntryRepository balanceEntryRepository, FeeService feeService) {
         this.accountRepository = accountRepository;
         this.paymentRepository = paymentRepository;
-        this.transactionRepository = transactionRepository;
+        this.balanceEntryRepository = balanceEntryRepository;
         this.feeService = feeService;
     }
 
@@ -57,7 +57,7 @@ public class PaymentService {
             payment.completed();
             paymentRepository.store(payment);
 
-            transactionRepository.registerPayment(payment);
+            balanceEntryRepository.registerPayment(payment);
             tx.commit();
             return payment;
         }

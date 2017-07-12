@@ -10,11 +10,9 @@ import org.apache.ignite.cache.query.SqlQuery;
 import org.apache.ignite.internal.processors.cache.CacheEntryImpl;
 import ru.live.toofast.entity.account.Account;
 import ru.live.toofast.entity.payment.Payment;
-import ru.live.toofast.entity.payment.TransactionEntry;
 import ru.live.toofast.exception.EntityNotFoundException;
 
 import javax.annotation.Nullable;
-import javax.cache.Cache;
 import java.util.Collection;
 import java.util.List;
 

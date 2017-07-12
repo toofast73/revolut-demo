@@ -3,8 +3,8 @@ package ru.live.toofast.cache;
 import org.apache.ignite.cache.CacheAtomicityMode;
 import org.apache.ignite.configuration.CacheConfiguration;
 import ru.live.toofast.entity.account.Account;
+import ru.live.toofast.entity.payment.BalanceEntry;
 import ru.live.toofast.entity.payment.Payment;
-import ru.live.toofast.entity.payment.TransactionEntry;
 
 /**
  * Configuration for entity tables.
@@ -28,11 +28,11 @@ public class CacheConfigurations {
     }
 
 
-    public static CacheConfiguration transactionCacheConfiguration() {
-        CacheConfiguration<Long, TransactionEntry> cc = new CacheConfiguration<>();
+    public static CacheConfiguration balanceEntryCacheConfiguration() {
+        CacheConfiguration<Long, BalanceEntry> cc = new CacheConfiguration<>();
         cc.setAtomicityMode(CacheAtomicityMode.TRANSACTIONAL);
-        cc.setName("transactions");
-        cc.setIndexedTypes(Long.class, TransactionEntry.class);
+        cc.setName("balanceEntries");
+        cc.setIndexedTypes(Long.class, BalanceEntry.class);
         return cc;
     }
 

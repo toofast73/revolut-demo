@@ -13,7 +13,7 @@ import ru.live.toofast.entity.account.Account
 import ru.live.toofast.entity.account.AccountStatus
 import ru.live.toofast.entity.payment.Payment
 import ru.live.toofast.entity.payment.PaymentDirection
-import ru.live.toofast.entity.payment.TransactionEntry
+import ru.live.toofast.entity.payment.BalanceEntry
 import ru.live.toofast.exception.AccountValidationException
 import ru.live.toofast.exception.NotEnoughFundsException
 import ru.live.toofast.repository.AccountRepository
@@ -57,19 +57,19 @@ class PaymentServiceTest extends Specification {
         accountRepository.get(accountList.last().id).balance.doubleValue() == 10100.0;
         payment.getFee().doubleValue() == 1.0
 
-        List<TransactionEntry> paymentTransactions = transactionRepository.getByPaymentId(payment.id)
+        List<BalanceEntry> paymentTransactions = transactionRepository.getByPaymentId(payment.id)
         paymentTransactions.size() == 2
 
-        List<TransactionEntry> sourceAccountTransactions = transactionRepository.getByAccountId(accountList.first().id)
+        List<BalanceEntry> sourceAccountTransactions = transactionRepository.getByAccountId(accountList.first().id)
         sourceAccountTransactions.size() == 1
-        TransactionEntry sourceEntry = sourceAccountTransactions.first()
+        BalanceEntry sourceEntry = sourceAccountTransactions.first()
         sourceEntry.accountId == accountList.first().id
         sourceEntry.paymentId == payment.id
         sourceEntry.direction == PaymentDirection.PAY
         sourceEntry.amount == payment.amount
 
-        List<TransactionEntry> destinationAccountTransactions = transactionRepository.getByAccountId(accountList.last().id)
-        TransactionEntry first = destinationAccountTransactions.first()
+        List<BalanceEntry> destinationAccountTransactions = transactionRepository.getByAccountId(accountList.last().id)
+        BalanceEntry first = destinationAccountTransactions.first()
         first.accountId == accountList.last().id
         first.paymentId == payment.id
         first.direction == PaymentDirection.RECEIVE

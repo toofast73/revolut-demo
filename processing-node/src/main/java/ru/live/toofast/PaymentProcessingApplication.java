@@ -12,14 +12,14 @@ import org.glassfish.jersey.servlet.ServletContainer;
 import org.jetbrains.annotations.NotNull;
 import ru.live.toofast.cache.CacheConfigurations;
 import ru.live.toofast.controller.AccountController;
+import ru.live.toofast.controller.BalanceEntryController;
 import ru.live.toofast.controller.PaymentController;
-import ru.live.toofast.controller.TransactionEntryController;
 import ru.live.toofast.entity.account.Account;
+import ru.live.toofast.entity.payment.BalanceEntry;
 import ru.live.toofast.entity.payment.Payment;
-import ru.live.toofast.entity.payment.TransactionEntry;
 import ru.live.toofast.repository.AccountRepository;
 import ru.live.toofast.repository.PaymentRepository;
-import ru.live.toofast.repository.TransactionRepository;
+import ru.live.toofast.repository.BalanceEntryRepository;
 import ru.live.toofast.service.FeeService;
 import ru.live.toofast.service.PaymentService;
 
@@ -76,17 +76,19 @@ public class PaymentProcessingApplication {
         ResourceConfig config = new ResourceConfig();
         config.register(new AccountController(accountRepository()));
         config.register(new PaymentController(paymentService()));
+        config.register(new BalanceEntryController(balanceEntryRepository()));
+
         config.register(org.glassfish.jersey.jackson.JacksonFeature.class);
         return config;
     }
 
     private static PaymentService paymentService() {
 
-        return new PaymentService(accountRepository(), paymentRepository(), transactionRepository(), new FeeService());
+        return new PaymentService(accountRepository(), paymentRepository(), balanceEntryRepository(), new FeeService());
     }
 
-    private static TransactionRepository transactionRepository() {
-        return new TransactionRepository(transactionIgniteCache(), transactionSequence());
+    private static BalanceEntryRepository balanceEntryRepository() {
+        return new BalanceEntryRepository(balanceEntryIgniteCache(), balanceEntrySequence());
     }
 
     private static PaymentRepository paymentRepository() {
@@ -128,9 +130,9 @@ public class PaymentProcessingApplication {
         );
     }
 
-    private static IgniteAtomicSequence transactionSequence() {
+    private static IgniteAtomicSequence balanceEntrySequence() {
         return Ignition.ignite().atomicSequence(
-                "transactionSequence",
+                "balanceEntrySequence",
                 0,
                 true
         );
@@ -144,8 +146,8 @@ public class PaymentProcessingApplication {
         return Ignition.ignite().getOrCreateCache(CacheConfigurations.paymentCacheConfiguration());
     }
 
-    private static IgniteCache<Long, TransactionEntry> transactionIgniteCache() {
-        return Ignition.ignite().getOrCreateCache(CacheConfigurations.transactionCacheConfiguration());
+    private static IgniteCache<Long, BalanceEntry> balanceEntryIgniteCache() {
+        return Ignition.ignite().getOrCreateCache(CacheConfigurations.balanceEntryCacheConfiguration());
     }
 
     /**
