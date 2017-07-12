@@ -22,7 +22,7 @@ API interfaces are AccountApi, AccountBalanceApi, PaymentApi.
 
 ##### Scalability:
 Application logic is divided into two layers:
-1) Stateful in-memory ignite cache nodes, united into a single in-memory data grid. 
+1) Stateful in-memory ignite cache nodes, united into a single in-memory data-cluster. 
 You can scale the load by adding more nodes.
 
 2) Stateless processing nodes. 
