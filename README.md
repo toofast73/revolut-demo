@@ -32,7 +32,7 @@ They contain business logic and load data from cache cluster via Map.get() and S
 You can scale processing logic by adding more nodes (and balance http-requests between them)
 
 ##### Durability:
-Cache node durability is provided via data redundency. 
+Cache node durability is provided via data redundancy. 
    Backup copies of cache entries are sharded across the cluster. 
    If one node fails -- other remain.  
 
