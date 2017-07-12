@@ -7,12 +7,12 @@ apply from: "dependencies.gradle"
 sourceCompatibility = 1.8
 
 repositories {
-    maven { url 'http://sbtatlas.sigma.sbrf.ru/nexus/content/groups/dbofi/' }
+    mavenCentral()
 }
 
 buildscript {
     repositories {
-        maven { url "http://sbtatlas.sigma.sbrf.ru/nexus/content/groups/dbofi/" }
+        mavenCentral()
     }
 }
 

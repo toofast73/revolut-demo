@@ -9,12 +9,12 @@ apply plugin: 'gradle-one-jar'
 sourceCompatibility = 1.8
 
 repositories {
-    maven { url "http://sbtatlas.sigma.sbrf.ru/nexus/content/groups/dbofi/" }
+    mavenCentral()
 }
 
 buildscript {
     repositories {
-        maven { url "http://sbtatlas.sigma.sbrf.ru/nexus/content/groups/dbofi/" }
+        mavenCentral()
     }
     dependencies {
         classpath 'com.github.rholder:gradle-one-jar:1.0.4'
