@@ -50,15 +50,11 @@ java -jar processing-node\build\libs\processing-node-1.0-SNAPSHOT-standalone.jar
 
 
 ##### Technologies used:
-  Java 8
-  
-  Jetty, Jersey
-  
-  Apache ignite
-  
-  Groovy, Spock
-  
-  Gradle
+   Java 8   
+   Jetty, Jersey  
+   Apache ignite  
+   Groovy, Spock  
+   Gradle   
 
 Thought about using Spring Cloud(but it's prohibited) and Akka (http/data). Akka does not look 'simple and to the point' to me.
 
