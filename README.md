@@ -16,7 +16,9 @@ API interfaces are AccountApi, AccountBalanceApi, PaymentApi.
 3) Test coverage is 85% (LoC)
 4) Services are covered with unit/integration tests. 
 5) Controllers are covered with unit(stubs instead of services) and end-to-end(real application with in memory cache instance) tests. The ignite-cache is required, because it handles transactions isolation logic.
- Transactions are implemented using Ignite cache features. See: PaymentService and https://apacheignite.readme.io/v2.0/docs/transactions
+ Transactions are implemented using Ignite cache features. 
+ 
+ See: PaymentService and https://apacheignite.readme.io/v2.0/docs/transactions
 
 ##### Scalability:
 Application logic is divided into two layers:
