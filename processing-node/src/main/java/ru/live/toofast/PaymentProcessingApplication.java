@@ -13,6 +13,7 @@ import org.jetbrains.annotations.NotNull;
 import ru.live.toofast.cache.CacheConfigurations;
 import ru.live.toofast.controller.AccountController;
 import ru.live.toofast.controller.PaymentController;
+import ru.live.toofast.controller.TransactionEntryController;
 import ru.live.toofast.entity.account.Account;
 import ru.live.toofast.entity.payment.Payment;
 import ru.live.toofast.entity.payment.TransactionEntry;
@@ -21,8 +22,6 @@ import ru.live.toofast.repository.PaymentRepository;
 import ru.live.toofast.repository.TransactionRepository;
 import ru.live.toofast.service.FeeService;
 import ru.live.toofast.service.PaymentService;
-
-import javax.cache.Cache;
 
 public class PaymentProcessingApplication {
 
@@ -106,7 +105,7 @@ public class PaymentProcessingApplication {
     }
 
     private static AccountRepository accountRepository(){
-        return new AccountRepository(accountIgniteCache(), accountSequence());
+        return new AccountRepository(accountIgniteCache(), accountByCardCache(), accountByPhoneCache(), accountSequence());
     }
 
     /**
@@ -137,16 +136,32 @@ public class PaymentProcessingApplication {
         );
     }
 
-    private static Cache<Long, Account> accountIgniteCache() {
+    private static IgniteCache<Long, Account> accountIgniteCache() {
         return Ignition.ignite().getOrCreateCache(CacheConfigurations.accountCacheConfiguration());
     }
 
-    private static Cache<Long, Payment> paymentIgniteCache() {
+    private static IgniteCache<Long, Payment> paymentIgniteCache() {
         return Ignition.ignite().getOrCreateCache(CacheConfigurations.paymentCacheConfiguration());
     }
 
     private static IgniteCache<Long, TransactionEntry> transactionIgniteCache() {
         return Ignition.ignite().getOrCreateCache(CacheConfigurations.transactionCacheConfiguration());
+    }
+
+    /**
+     * Key: credit card number
+     * Val: associated accountId
+     */
+    private static IgniteCache<String, Long> accountByCardCache() {
+        return Ignition.ignite().getOrCreateCache(CacheConfigurations.accountsByCardConfiguration());
+    }
+
+    /**
+     * Key: phone number
+     * Val: associated accountId
+     */
+    private static IgniteCache<String, Long> accountByPhoneCache() {
+        return Ignition.ignite().getOrCreateCache(CacheConfigurations.accountsByPhoneCacheConfiguration());
     }
 
 }

@@ -8,6 +8,8 @@ import ru.live.toofast.repository.AccountRepository;
 
 import javax.ws.rs.core.Response;
 
+import java.util.Collection;
+
 import static javax.ws.rs.core.Response.Status.CREATED;
 
 
@@ -34,6 +36,33 @@ public class AccountController implements AccountApi {
         }
     }
 
+    @Override
+    public Collection<Account> getByClient(long id) {
+        return accountRepository.getByClient(id);
+    }
+
+    @Override
+    public Account getByPhone(String phone) {
+        return accountRepository.getByPhone(phone);
+    }
+
+    @Override
+    public Account getByCard(String card) {
+        return accountRepository.getByCard(card);
+    }
+
+    @Override
+    public Response linkCard(long accountId, String card) {
+        accountRepository.linkCard(accountId, card);
+        return Response.ok().build();
+    }
+
+    @Override
+    public Response linkPhone(long accountId, String phone) {
+        accountRepository.linkPhone(accountId, phone);
+        return Response.ok().build();
+    }
+
     /**
      * Create if absent.
      * Throw AlreadyExistsException, if already exists
@@ -48,5 +77,4 @@ public class AccountController implements AccountApi {
 
         return Response.status(CREATED).entity(stored).build();
     }
-
 }

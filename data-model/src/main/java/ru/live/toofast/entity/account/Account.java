@@ -1,5 +1,7 @@
 package ru.live.toofast.entity.account;
 
+import org.apache.ignite.cache.query.annotations.QuerySqlField;
+
 import java.math.BigDecimal;
 import java.util.Objects;
 
@@ -8,6 +10,8 @@ import java.util.Objects;
  */
 public class Account {
     private Long id;
+
+    @QuerySqlField(index = true)
     private long clientId;
 
     //Account balance. The amount of money, available for transfers.

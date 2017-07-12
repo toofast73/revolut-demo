@@ -15,6 +15,7 @@ public class CacheConfigurations {
     public static CacheConfiguration accountCacheConfiguration() {
         CacheConfiguration<Long, Account> cc = new CacheConfiguration<>();
         cc.setAtomicityMode(CacheAtomicityMode.TRANSACTIONAL);
+        cc.setIndexedTypes(Long.class, Account.class);
         cc.setName("accounts");
         return cc;
     }
@@ -37,15 +38,13 @@ public class CacheConfigurations {
 
     public static CacheConfiguration accountsByPhoneCacheConfiguration() {
         CacheConfiguration<String, Long> cc = new CacheConfiguration<>();
-        cc.setName("transactions");
+        cc.setName("accountsByPhone");
         return cc;
     }
 
     public static CacheConfiguration accountsByCardConfiguration() {
-        CacheConfiguration<Long, Long> cc = new CacheConfiguration<>();
-        cc.setName("transactions");
+        CacheConfiguration<String, Long> cc = new CacheConfiguration<>();
+        cc.setName("accountsByCard");
         return cc;
     }
-
-
 }
